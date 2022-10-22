@@ -1,5 +1,5 @@
 # Tris
-Unbeatable tris player (minimax algorithm written in Prolog).
+Unbeatable tic-tac-toe player based on the minimax algorithm.
 
 ## Run
 
