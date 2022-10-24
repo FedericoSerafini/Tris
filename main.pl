@@ -1,3 +1,8 @@
+:- initialization(main, main).
+
+main :-
+  play.
+
 play :-
   write('\n'),
   board_init(Board),
@@ -11,17 +16,6 @@ board_init(Board) :-
     (3, 1, _), (3, 2, _), (3, 3, _)
   ].
 
-player :-
-  write('\n************************\n\n'),
-  board_init(Board),
-  board_print(Board),
-  player_turn(Board, _Board_out).
-
-computer :-
-  write('\n************************\n\n'),
-  board_init(Board),
-  computer_turn(Board, _Board_out).
-
 computer_turn(Board_in, Board_out) :-
   (turn_simulation(Board_in, 'O', Board_list)
   ->
@@ -33,17 +27,17 @@ computer_turn(Board_in, Board_out) :-
       (win_chk(Board_out, 'O')
       ->
         writeln('Computer wins!'),
-        player
+        player_play_again
       ;
         player_turn(Board_out, _)
       )
     ;
       writeln('Game ended in a draw!'),
-      computer
+      computer_play_again
     )
   ;
     writeln('Game ended in a draw!'),
-    computer
+    computer_play_again
   ).
 
 player_turn(Board_in, Board_out) :-
@@ -62,12 +56,12 @@ player_turn(Board_in, Board_out) :-
         (win_chk(Board_out, 'X')
         ->
           writeln('You win!'),
-          computer
+          computer_play_again
         ;
           (win_chk(Board_out, 'O')
           ->
             writeln('Computer wins!'),
-            player
+            player_play_again
           ;
             computer_turn(Board_out, _)
           )
@@ -82,19 +76,37 @@ player_turn(Board_in, Board_out) :-
     )
   ;
     writeln('Game ended in a draw!'),
-    player
+    player_play_again
   ).
 
-turn_simulation(Board, S, Board_list) :-
+% Get all the possible boards starting from Board_in and placing the symbol 'S'.
+turn_simulation(Board_in, S, Board_list) :-
   setof(B,
-        I1^I2^Board^(
-          B = Board,
-          member((I1, I2, X), Board),
+        I1^I2^Board_in^(
+          B = Board_in,
+          member((I1, I2, X), Board_in),
           var(X),
           X = S
         ),
         Board_list).
 
+player_play_again :-
+  write('\n************************\n\n'),
+  board_init(Board),
+  board_print(Board),
+  player_turn(Board, _Board_out).
+
+computer_play_again :-
+  write('\n************************\n\n'),
+  board_init(Board),
+  computer_turn(Board, _Board_out).
+
+/*
+  Board_in evaluation:
+    1 <==> 'O' wins:
+   -1 <==> 'X' wins;
+    0 otherwise.
+*/
 board_value(Board_in, S, Val) :-
   (win_chk(Board_in, 'X')
   ->
@@ -120,6 +132,7 @@ board_value(Board_in, S, Val) :-
     )
   ).
 
+% Find the Board_out in Board_list with the minimum evaluation.
 board_list_val_min(Board_list, S, Board_out, Val_out) :-
   board_list_val_min_loop(Board_list, S, [], 100, Board_out, Val_out).
 board_list_val_min_loop([], _S, Board_old, Val_old, Board_out, Val_out) :-
@@ -146,6 +159,7 @@ board_list_val_min_loop([Board|T], S, Board_old, Val_old, Board_out, Val_out) :-
     )
   ).
 
+% Find the Board_out in Board_list with the maximum evaluation.
 board_list_val_max(Board_list, S, Board_out, Val_out) :-
   board_list_val_max_loop(Board_list, S, [], -100, Board_out, Val_out).
 board_list_val_max_loop([], _S, Board_old, Val_old, Board_out, Val_out) :-

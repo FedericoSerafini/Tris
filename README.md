@@ -5,5 +5,4 @@ Unbeatable tic-tac-toe player based on the minimax algorithm.
 
 ```
 swipl main.pl
-?- play.
 ```
