@@ -22,17 +22,23 @@ computer_turn(Board_in, Board_out) :-
     ->
       (win_chk(Board_out, 'O')
       ->
-        writeln('Computer wins!'),
+        writeln('******************'),
+        writeln('* Computer wins! *'),
+        writeln('******************'),
         player_play_again
       ;
         player_turn(Board_out, _)
       )
     ;
-      writeln('Game ended in a draw!'),
+      writeln('*************************'),
+      writeln('* Game ended in a draw! *'),
+      writeln('*************************'),
       computer_play_again
     )
   ;
-    writeln('Game ended in a draw!'),
+    writeln('*************************'),
+    writeln('* Game ended in a draw! *'),
+    writeln('*************************'),
     computer_play_again
   ).
 
@@ -51,12 +57,16 @@ player_turn(Board_in, Board_out) :-
         board_print(Board_out),
         (win_chk(Board_out, 'X')
         ->
-          writeln('You win!'),
+        writeln('************'),
+        writeln('* You win! *'),
+        writeln('************'),
           computer_play_again
         ;
           (win_chk(Board_out, 'O')
           ->
-            writeln('Computer wins!'),
+            writeln('******************'),
+            writeln('* Computer wins! *'),
+            writeln('******************'),
             player_play_again
           ;
             computer_turn(Board_out, _)
@@ -71,7 +81,9 @@ player_turn(Board_in, Board_out) :-
       player_turn(Board_in, _)
     )
   ;
-    writeln('Game ended in a draw!'),
+    writeln('*************************'),
+    writeln('* Game ended in a draw! *'),
+    writeln('*************************'),
     player_play_again
   ).
 
@@ -87,13 +99,13 @@ turn_simulation(Board_in, S, Board_list) :-
         Board_list).
 
 player_play_again :-
-  write('\n************************\n\n'),
+  write('\n\n'),
   board_init(Board),
   board_print(Board),
   player_turn(Board, _Board_out).
 
 computer_play_again :-
-  write('\n************************\n\n'),
+  write('\n\n'),
   board_init(Board),
   computer_turn(Board, _Board_out).
 
