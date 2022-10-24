@@ -1,10 +1,6 @@
 :- initialization(main, main).
 
 main :-
-  play.
-
-play :-
-  write('\n'),
   board_init(Board),
   computer_turn(Board, _Board_out).
 
@@ -79,7 +75,7 @@ player_turn(Board_in, Board_out) :-
     player_play_again
   ).
 
-% Get all the possible boards starting from Board_in and placing the symbol 'S'.
+% Get all the possible boards starting from Board_in and placing the symbol S.
 turn_simulation(Board_in, S, Board_list) :-
   setof(B,
         I1^I2^Board_in^(
